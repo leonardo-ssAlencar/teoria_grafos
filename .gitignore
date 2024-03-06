@@ -1,2 +1,7 @@
 venv
 .idea
+
+.pytest_cach/
+.vscode/
+/docs
+/__pycache__
