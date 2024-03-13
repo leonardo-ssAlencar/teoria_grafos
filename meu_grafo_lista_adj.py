@@ -4,8 +4,38 @@ from bibgrafo.grafo_errors import *
 
 class MeuGrafo(GrafoListaAdjacencia):
 
+    def __montar_dfs(self, V, arvore , arestasPercoridas: dict):
+
+        x = self.arestas_sobre_vertice(V)
+
+        if x == {}:
+            return
+        
+        arvore.adicionar_vertice(V)
+
+        arestasPercoridas[x[cont]] = True
+        arvore.adicionar_aresta(self.arestas[x[cont]])
+
+        self.__montar_dfs()
+        
+
+
+
     def dfs(self, V=""):
-        pass
+
+        arvore_dfs = MeuGrafo()
+        arestasPercoridas = dict()
+
+        raiz = self.get_vertice(V)
+
+        if not raiz:
+            raise VerticeInvalidoError
+        
+        arvore_dfs.adiciona_vertice(raiz)
+
+        self.__montar_dfs(V, arvore_dfs, arestasPercoridas)
+        
+        
 
 
     def vertices_nao_adjacentes(self):
@@ -16,8 +46,6 @@ class MeuGrafo(GrafoListaAdjacencia):
         :return: Um objeto do tipo set que contém os pares de vértices não adjacentes
         '''
         v = self.vertices.copy()
-        
-        
         
         vertices = set()
 

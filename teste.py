@@ -20,10 +20,8 @@ g_p.adiciona_aresta('a8', 'M', 'T')
 g_p.adiciona_aresta('a9', 'T', 'Z')
 
 
-x = g_p.vertices_nao_adjacentes()
+arestas = g_p.arestas_sobre_vertice("C")
 
-
-for i in x:
-   print(i)
-
-print(g_p)
+print(arestas)
+print(arestas.pop())
+print(arestas)
