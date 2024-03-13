@@ -4,6 +4,9 @@ from bibgrafo.grafo_errors import *
 
 class MeuGrafo(GrafoListaAdjacencia):
 
+    def dfs(self, V=""):
+        pass
+
 
     def vertices_nao_adjacentes(self):
         '''
@@ -12,26 +15,31 @@ class MeuGrafo(GrafoListaAdjacencia):
         Onde X, Z e W são vértices no grafo que não tem uma aresta entre eles.
         :return: Um objeto do tipo set que contém os pares de vértices não adjacentes
         '''
+        v = self.vertices.copy()
+        
+        
+        
+        vertices = set()
 
-        vertices_nAdjacentes = set()
         for i in self.vertices:
-            vertices = self.vertices.copy()
-            vertices.remove(i)
-            for j in self.arestas_sobre_vertice(i.rotulo):
-    
-             try:
-                if self.arestas[j].v1 == i:
-                  vertices.remove(self.arestas[j].v2)
-                else:
-                  vertices.remove(self.arestas[j].v1)
-             except:
-                pass
+            for j in v:
+                if i == j:continue
+                temAresta = False
+                for k in self.arestas:
+                    v1 = self.arestas[k].v1
+                    v2 = self.arestas[k].v2
 
-            for x in vertices:
-                valor = str.format("{}-{}", i.rotulo, x.rotulo)
-                vertices_nAdjacentes.add(valor)
+                    if (v1 == i and v2 == j) or (v1 == j and v2 == i):
+                        temAresta = True
+                        break
 
-        return vertices_nAdjacentes
+                if not temAresta:
+                    vertices.add(i.rotulo +"-"+j.rotulo)
+
+            v.remove(i)
+        return vertices
+
+
 
     def ha_laco(self):
         '''
@@ -119,6 +127,8 @@ class MeuGrafo(GrafoListaAdjacencia):
             if self.arestas[i].v1.rotulo == V or self.arestas[i].v2.rotulo == V: 
                 arestas.add(i)
         return arestas
+    
+
 
     def eh_completo(self):
         '''
