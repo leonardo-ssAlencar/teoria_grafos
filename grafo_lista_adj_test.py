@@ -285,3 +285,12 @@ class TestGrafo(unittest.TestCase):
         self.assertFalse((self.g_l5.eh_completo()))
         self.assertFalse((self.g_d.eh_completo()))
         self.assertFalse((self.g_d2.eh_completo()))
+    
+    def test_conexo(self):
+        self.assertTrue(self.g_p.conexo())
+        self.assertTrue(self.g_c.conexo())
+        self.assertFalse(self.g_l1.conexo())
+        self.assertFalse(self.g_d.conexo())
+
+    def test_ha_ciclo(self):
+        pass
