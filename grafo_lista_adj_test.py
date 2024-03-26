@@ -292,5 +292,32 @@ class TestGrafo(unittest.TestCase):
         self.assertFalse(self.g_l1.conexo())
         self.assertFalse(self.g_d.conexo())
 
+    def test_caminho(self):
+        self.assertEqual(self.g_p.caminho(1), [])
+        self.assertNotEqual(self.g_p.caminho(2), [])
+        self.assertNotEqual(self.g_p.caminho(3), [])
+        self.assertNotEqual(self.g_p.caminho(4), [])
+        self.assertNotEqual(self.g_p.caminho(5), [])
+        self.assertEqual(self.g_p.caminho(6), [])
+        
+        self.assertEqual(self.g_p_sem_paralelas.caminho(1), [])
+        self.assertNotEqual(self.g_p_sem_paralelas.caminho(2), [])
+        self.assertNotEqual(self.g_p_sem_paralelas.caminho(3), [])
+        self.assertNotEqual(self.g_p_sem_paralelas.caminho(4), [])
+        self.assertNotEqual(self.g_p_sem_paralelas.caminho(5), [])
+        self.assertEqual(self.g_p_sem_paralelas.caminho(6), [])
+        
+        self.assertEqual(self.g_c.caminho(1), [])
+        self.assertNotEqual(self.g_c.caminho(2), [])
+        self.assertNotEqual(self.g_c.caminho(3), [])
+        self.assertNotEqual(self.g_c.caminho(4), [])
+        self.assertEqual(self.g_c.caminho(5), [])
+        
     def test_ha_ciclo(self):
-        pass
+        self.assertFalse(self.g_d.ha_ciclo())
+        self.assertFalse(self.g_d2.ha_ciclo())
+        self.assertTrue(self.g_p.ha_ciclo() != False)
+        self.assertTrue(self.g_p_sem_paralelas.ha_ciclo() != False)
+        self.assertTrue(self.g_c.ha_ciclo() != False)
+        self.assertFalse(self.g_c2.ha_ciclo())
+        self.assertFalse(self.g_c3.ha_ciclo())

@@ -203,28 +203,53 @@ class MeuGrafo(GrafoListaAdjacencia):
 
         return len(arvore.vertices) == len(self.vertices)
     
- 
-    def caminho(self, v1, v2):
+    def caminho_entre_vertices(self, v, v2, caminho, arestas_visitadas, ciclo = False):
+
+        if v == v2 and not ciclo:
+            return v
         
-        arvore = self.dfs(v1)
-
-        arvore.get_vertice(v2)
-
-        caminho = []
-
-        caminho.append(v1)
-        prox_vertice = v1
-        for i in arvore.arestas:
-            aresta = arvore.arestas[i]
-            
-            prox_vertice = aresta.v1.rotulo if aresta.v1.rotulo != prox_vertice else aresta.v2.rotulo
-            
-            caminho.append(aresta.rotulo)
-            caminho.append(prox_vertice)
-
-            if aresta.v2.rotulo == v2:
-                break
+        if v in arestas_visitadas.values():
+            return None
         
-        return caminho, arvore
+        for i in self.arestas_sobre_vertice(v):
+             aresta = self.arestas[i]
+             if aresta.rotulo not in arestas_visitadas.keys():
+                prox_vertice = aresta.v1.rotulo if aresta.v1.rotulo != v else aresta.v2.rotulo
+                arestas_visitadas[aresta.rotulo] = v
+                x = self.caminho_entre_vertices(prox_vertice, v2, caminho, arestas_visitadas)
+                
+                if x != None:
+                    if(caminho == []):
+                      caminho.append(prox_vertice)
+                    caminho.append(aresta.rotulo)
+                    caminho.append(v)
+                    break
+                
+        
+        if caminho == []:
+            return None
 
+        return caminho
+    
+    
+    def caminho(self, n):
+        for i in self.vertices:
+            for j in self.vertices:
+                if i == j: continue
+                
+                caminho =  self.caminho_entre_vertices(i.rotulo, j.rotulo, [], {})
+                if int((len(caminho) + 1)/2) == n:
+                    return caminho
+                
+        return []
+    
+    def ha_ciclo(self):
+        ciclo = []
+        for i in self.vertices:
+            ciclo = self.caminho_entre_vertices(i.rotulo, i.rotulo, [], {}, True)
+            if ciclo != None and (len(ciclo) + 1)/2 > 2 :
+                return ciclo
+        
 
+        return False
+        

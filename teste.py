@@ -34,16 +34,13 @@ g_p.adiciona_aresta('a9', 'T', 'Z')
 
 
 
-# g_l1 = meu_grafo_lista_adj.MeuGrafo()
-# g_l1.adiciona_vertice("A")
-# g_l1.adiciona_vertice("B")
-# g_l1.adiciona_vertice("C")
-# g_l1.adiciona_vertice("D")
-# g_l1.adiciona_aresta('a1', 'A', 'A')
-# g_l1.adiciona_aresta('a2', 'A', 'B')
-# g_l1.adiciona_aresta('a3', 'A', 'A')
+g_l1 = meu_grafo_lista_adj.MeuGrafo()
+g_l1.adiciona_vertice("A")
+g_l1.adiciona_vertice("B")
+g_l1.adiciona_vertice("C")
+g_l1.adiciona_vertice("D")
+g_l1.adiciona_aresta('a1', 'A', 'A')
+g_l1.adiciona_aresta('a2', 'A', 'B')
+g_l1.adiciona_aresta('a3', 'A', 'A')
 
-v, a = g_p.caminho_entre_vertices("J", "Z")
-
-print(v)
-print(a)
+print(g_p.ha_ciclo())
