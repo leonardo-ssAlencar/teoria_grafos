@@ -1,9 +1,10 @@
 venv
 .idea
 
-.pytest_cach/
+.pytest_cache/
 .vscode/
 /docs
 /__pycache__
 
 teste.py
+*.zip
