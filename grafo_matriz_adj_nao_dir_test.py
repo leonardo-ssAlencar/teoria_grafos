@@ -25,22 +25,22 @@ class TestGrafo(unittest.TestCase):
         self.g_p.adiciona_aresta('a9', 'T', 'Z')
 
         # Clone do Grafo da Paraíba para ver se o método equals está funcionando
-        self.g_p2 = MeuGrafo([Vertice('J'),
-                             Vertice('C'),
-                             Vertice('E'),
-                             Vertice('P'),
-                             Vertice('M'),
-                             Vertice('T'),
-                             Vertice('Z')])
-        self.g_p2.adiciona_aresta('a1', 'J', 'C')
-        self.g_p2.adiciona_aresta('a2', 'C', 'E')
-        self.g_p2.adiciona_aresta('a3', 'C', 'E')
-        self.g_p2.adiciona_aresta('a4', 'P', 'C')
-        self.g_p2.adiciona_aresta('a5', 'P', 'C')
-        self.g_p2.adiciona_aresta('a6', 'T', 'C')
-        self.g_p2.adiciona_aresta('a7', 'M', 'C')
-        self.g_p2.adiciona_aresta('a8', 'M', 'T')
-        self.g_p2.adiciona_aresta('a9', 'T', 'Z')
+        # self.g_p2 = MeuGrafo([Vertice('J'),
+        #                      Vertice('C'),
+        #                      Vertice('E'),
+        #                      Vertice('P'),
+        #                      Vertice('M'),
+        #                      Vertice('T'),
+        #                      Vertice('Z')])
+        # self.g_p2.adiciona_aresta('a1', 'J', 'C')
+        # self.g_p2.adiciona_aresta('a2', 'C', 'E')
+        # self.g_p2.adiciona_aresta('a3', 'C', 'E')
+        # self.g_p2.adiciona_aresta('a4', 'P', 'C')
+        # self.g_p2.adiciona_aresta('a5', 'P', 'C')
+        # self.g_p2.adiciona_aresta('a6', 'T', 'C')
+        # self.g_p2.adiciona_aresta('a7', 'M', 'C')
+        # self.g_p2.adiciona_aresta('a8', 'M', 'T')
+        # self.g_p2.adiciona_aresta('a9', 'T', 'Z')
 
         # Outro clone do Grafo da Paraíba para ver se o método equals está funcionando
         # Esse tem um pequena diferença na primeira aresta
@@ -292,6 +292,7 @@ class TestGrafo(unittest.TestCase):
             self.g_p.arestas_sobre_vertice('A')
 
     def test_eh_completo(self):
+
         self.assertFalse(self.g_p.eh_completo())
         self.assertFalse((self.g_p_sem_paralelas.eh_completo()))
         self.assertTrue((self.g_c.eh_completo()))
@@ -302,3 +303,30 @@ class TestGrafo(unittest.TestCase):
         self.assertFalse((self.g_l3.eh_completo()))
         self.assertFalse((self.g_l4.eh_completo()))
         self.assertFalse((self.g_l5.eh_completo()))
+
+    def test_alcancabilidade(self):
+        for i in self.g_p.matriz_alcancabilidade():
+            self.assertNotIn(0, i)
+        for i in self.g_p_sem_paralelas.matriz_alcancabilidade():
+            self.assertNotIn(0, i)
+        
+        for i in self.g_l1.matriz_alcancabilidade():
+            self.assertIn(0, i)
+
+        matriz_al_gp = [[ 1,  1,  1,  1,  1,  1,  1 ], [ 1,  1,  1,  1,  1,  1,  1 ], [ 1,  1,  1,  1,  1,  1,  1 ], [ 1,  1,  1,  1,  1,  1,  1 ], [ 1,  1,  1,  1,  1,  1,  1 ], [ 1,  1,  1,  1,  1,  1,  1 ], [ 1,  1,  1,  1,  1,  1,  1 ]]
+
+        self.assertEqual(matriz_al_gp, self.g_p.matriz_alcancabilidade())
+        self.assertEqual(matriz_al_gp, self.g_p_sem_paralelas.matriz_alcancabilidade())
+
+        matriz_al_gl1 = [[1,1,0,0], [1,1,0,0],[0,0,1,0],[0,0,0,1]]
+
+        self.assertEqual(matriz_al_gl1, self.g_l1.matriz_alcancabilidade())
+
+
+
+
+
+
+
+        
+        
