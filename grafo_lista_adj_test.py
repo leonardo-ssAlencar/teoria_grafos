@@ -285,3 +285,63 @@ class TestGrafo(unittest.TestCase):
         self.assertFalse((self.g_l5.eh_completo()))
         self.assertFalse((self.g_d.eh_completo()))
         self.assertFalse((self.g_d2.eh_completo()))
+    
+    def test_djkstra(self):
+        g_p = MeuGrafo()
+        g_p.adiciona_vertice("A")
+        g_p.adiciona_vertice("B")
+        g_p.adiciona_vertice("C")
+        g_p.adiciona_vertice("D")
+        g_p.adiciona_vertice("E")
+
+        g_p.adiciona_aresta("a1", "A", "B", 2)
+        g_p.adiciona_aresta("a2", "A", "C", 3)
+        g_p.adiciona_aresta("a3", "C", "D", 7)
+        g_p.adiciona_aresta("a5", "B", "D", 3)
+        g_p.adiciona_aresta("a6", "D", "E", 3)
+        g_p.adiciona_aresta("a7", "B", "E", 7)
+        g_p.adiciona_aresta("a8", "C", "B", 2)
+
+        """
+          A _ 2 _ B _ 7 _ C
+           \     / \     /
+            3   2   3   3
+             \ /     \ /
+              C _ 7 _ D
+        """
+
+        self.assertEqual(g_p.djkstra("A","E"), "A - B - D - E")
+        self.assertEqual(g_p.djkstra("A","D"), "A - B - D")
+        self.assertEqual(g_p.djkstra("C","D"), "C - B - D")
+
+        g_p2 = MeuGrafo()
+        g_p2.adiciona_vertice("A")
+        g_p2.adiciona_vertice("B")
+        g_p2.adiciona_vertice("C")
+        g_p2.adiciona_vertice("D")
+        g_p2.adiciona_vertice("E")
+
+        g_p2.adiciona_aresta("a1", "A", "B", 2)
+        g_p2.adiciona_aresta("a2", "A", "C", 3)
+        g_p2.adiciona_aresta("a3", "C", "D", 2)
+        g_p2.adiciona_aresta("a5", "B", "D", 3)
+        g_p2.adiciona_aresta("a6", "D", "E", 3)
+        g_p2.adiciona_aresta("a7", "B", "E", 5)
+        g_p2.adiciona_aresta("a8", "C", "B", 2)
+
+        """
+          A _ 2 _ B _ 5 _ E
+           \     / \     /
+            3   2   3    3
+             \ /     \ /
+              C _ 2 _ D
+        """
+
+        self.assertEqual(g_p2.djkstra("A","E"), "A - B - E")
+        self.assertEqual(g_p2.djkstra("A","D"), "A - B - D")
+        self.assertEqual(g_p2.djkstra("C","D"), "C - D")
+
+
+
+
+

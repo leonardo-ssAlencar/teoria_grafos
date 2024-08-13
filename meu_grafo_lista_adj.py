@@ -96,7 +96,7 @@ class MeuGrafo(GrafoListaAdjacencia):
                 
         return False
 
-    def arestas_sobre_vertice(self, V):
+    def arestas_sobre_vertice(self, V, dir=False):
         '''
         Provê uma lista que contém os rótulos das arestas que incidem sobre o vértice passado como parâmetro
         :param V: Um string com o rótulo do vértice a ser analisado
@@ -116,8 +116,14 @@ class MeuGrafo(GrafoListaAdjacencia):
             raise VerticeInvalidoError
 
         for i in self.arestas:
-            if self.arestas[i].v1.rotulo == V or self.arestas[i].v2.rotulo == V: 
-                arestas.add(i)
+            if not dir:
+                if self.arestas[i].v1.rotulo == V or self.arestas[i].v2.rotulo == V: 
+                    arestas.add(i)
+            
+            else:
+                if self.arestas[i].v1.rotulo == V:
+                    arestas.add(i)
+            
         return arestas
 
     def eh_completo(self):
@@ -126,3 +132,60 @@ class MeuGrafo(GrafoListaAdjacencia):
         :return: Um valor booleano que indica se o grafo é completo
         '''
         return not self.ha_laco() and not self.ha_paralelas() and self.vertices_nao_adjacentes() == set()
+    
+
+    def djkstra(self, v_inicio : str, v_final: str):
+
+        mDjkstra = dict()
+        nao_examinados = []
+
+        for i in self.vertices: #inicializa a tabela
+            mDjkstra[i.rotulo] = {"peso" : 0 if i.rotulo == v_inicio else float("inf"), "permanente" : 1 if i.rotulo == v_inicio else 0, "anterior" : "" }
+            nao_examinados.append(i.rotulo)
+
+        
+        v_atual = v_inicio # Aqui seria o w
+        
+        while v_atual != v_final: # Verifica se chegou ao destino
+            
+            menor = None
+            for j in self.arestas_sobre_vertice(v_atual, True): # verifica as arestas
+                
+                arr = self.arestas[j]
+                v1 = arr.v1
+                v2 = arr.v2
+
+                if v1 != v2: # descarta se for laço
+
+                    
+                    phi_r_w = mDjkstra[v1.rotulo]["peso"] + arr.peso # calcula o Phi
+                    
+                    if not mDjkstra[v2.rotulo]["permanente"] and  mDjkstra[v2.rotulo]["peso"] > phi_r_w: # verifica se necessita atualizar a tabela
+                        mDjkstra[v2.rotulo]["peso"] = phi_r_w # atualiza o valor na tabela
+                        mDjkstra[v2.rotulo]["anterior"] = v_atual # atualiza 
+                    
+                    if menor == None or mDjkstra[v2.rotulo]["peso"] < mDjkstra[menor]["peso"]:
+                        menor = v2.rotulo
+            
+            
+
+                
+            if menor == None: return None
+
+            mDjkstra[menor]["permanente"] = 1 # marca o vertice como já analisado
+
+            v_atual = menor # atualiza W
+            nao_examinados.remove(menor)
+
+        i = v_final
+        resultado = v_final
+
+        print(mDjkstra)
+
+
+        while i != v_inicio:
+            resultado = mDjkstra[i]["anterior"] + " - " +resultado
+            i = mDjkstra[i]["anterior"]
+
+        return resultado
+
