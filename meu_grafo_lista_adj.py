@@ -134,14 +134,24 @@ class MeuGrafo(GrafoListaAdjacencia):
         return not self.ha_laco() and not self.ha_paralelas() and self.vertices_nao_adjacentes() == set()
     
 
+    def computarCam(self, tabela, source, destination):
+        i = destination
+        resultado = destination
+
+        while i != source:
+            resultado = tabela[i]["anterior"] + " - " +resultado
+            i = tabela[i]["anterior"]
+
+        return resultado    
+
     def djkstra(self, v_inicio : str, v_final: str):
 
         mDjkstra = dict()
-        nao_examinados = []
 
         for i in self.vertices: #inicializa a tabela
-            mDjkstra[i.rotulo] = {"peso" : 0 if i.rotulo == v_inicio else float("inf"), "permanente" : 1 if i.rotulo == v_inicio else 0, "anterior" : "" }
-            nao_examinados.append(i.rotulo)
+            mDjkstra[i.rotulo] = {"peso": 0 if i.rotulo == v_inicio else float("inf"), "permanente" :  1 if i.rotulo == v_inicio else 0, "anterior": ""}
+        
+        heap = list()
 
         
         v_atual = v_inicio # Aqui seria o w
@@ -157,35 +167,50 @@ class MeuGrafo(GrafoListaAdjacencia):
 
                 if v1 != v2: # descarta se for laço
 
-                    
                     phi_r_w = mDjkstra[v1.rotulo]["peso"] + arr.peso # calcula o Phi
                     
                     if not mDjkstra[v2.rotulo]["permanente"] and  mDjkstra[v2.rotulo]["peso"] > phi_r_w: # verifica se necessita atualizar a tabela
                         mDjkstra[v2.rotulo]["peso"] = phi_r_w # atualiza o valor na tabela
                         mDjkstra[v2.rotulo]["anterior"] = v_atual # atualiza 
-                    
-                    if menor == None or mDjkstra[v2.rotulo]["peso"] < mDjkstra[menor]["peso"]:
-                        menor = v2.rotulo
+                        heap.append(( phi_r_w , v2.rotulo ))
+
             
+            menor = min(heap)
+
+            mDjkstra[menor[1]]["permanente"] = 1 # marca o vertice como já analisado
             
+            heap.remove(menor)
 
-                
-            if menor == None: return None
+            v_atual = menor[1] # atualiza W
 
-            mDjkstra[menor]["permanente"] = 1 # marca o vertice como já analisado
+        
 
-            v_atual = menor # atualiza W
-            nao_examinados.remove(menor)
+        
 
-        i = v_final
-        resultado = v_final
+        return self.computarCam(mDjkstra, v_inicio, v_final)
+    
 
-        print(mDjkstra)
+    def bellman_ford(self, v_inicio, v_fim):
+        mB_F = dict()
 
+        for i in self.vertices: #inicializa a tabela
+            mB_F[i.rotulo] = {"peso" : 0 if i.rotulo == v_inicio else float("inf"), "anterior" : "" }
 
-        while i != v_inicio:
-            resultado = mDjkstra[i]["anterior"] + " - " +resultado
-            i = mDjkstra[i]["anterior"]
+        swap = True
+        qtd_swaps = -1
+        while swap:
+            swap = False
+            if qtd_swaps > len(self.vertices) - 1:
+                break
+            
+            qtd_swaps +=1
+            for i in self.arestas:
+                a = self.get_aresta(i)
 
-        return resultado
+                calculo = mB_F[a.v1.rotulo]["peso"] + a.peso
+                if mB_F[a.v2.rotulo]["peso"] > calculo:
+                    mB_F[a.v2.rotulo]["peso"] = calculo
+                    mB_F[a.v2.rotulo]["anterior"] = a.v1.rotulo
+                    swap = True
 
+        return self.computarCam(mB_F, v_inicio, v_fim)
